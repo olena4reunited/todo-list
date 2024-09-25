@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+	<title>Home</title>
+{% endblock %}
+
+{% block content %}
+	<h1>Todo List</h1>
+	<a href="#">Create Task</a>
+
+	<ul>
+		{% for task in tasks %}
+			<li>
+				{{ task.content }} - {{ task.created_at }} {% if task.deadline %}(Deadline: {{ task.deadline }}){% endif %}
+				<a href="#">Update</a>
+				<a href="#">Delete</a>
+				{% if task.is_done %}
+						<a href="#">Undo</a>
+				{% else %}
+						<a href="#">Complete</a>
+				{% endif %}
+			</li>
+		{% endfor %}
+	</ul>
+	
+{% endblock %}
