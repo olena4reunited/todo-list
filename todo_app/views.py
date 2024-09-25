@@ -2,7 +2,7 @@ from django import views
 from django.shortcuts import render, redirect, get_object_or_404
 
 from todo_app.forms import TaskForm
-from todo_app.models import Task
+from todo_app.models import Task, Tag
 
 
 class HomeView(views.View):
@@ -64,3 +64,11 @@ class TaskDeleteView(views.View):
         task = get_object_or_404(Task, pk=task_id)
         task.delete()
         return redirect("todo-app:home")
+
+
+class TagListView(views.View):
+    template_name = "todo_app/tag_list.html"
+
+    def get(self, request):
+        tags = Tag.objects.all()
+        return render(request, self.template_name, {'tags': tags})
