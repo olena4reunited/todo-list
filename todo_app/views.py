@@ -25,6 +25,22 @@ class TaskCreateView(views.View):
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect("todo-app:home")
+        return render(request, self.template_name, {'form': form})
+
+
+
+class TaskUpdateView(views.View):
+    template_name = "todo_app/task_form.html"
+
+    def get(self, request, task_id):
+        form = TaskForm(instance=Task.objects.get(pk=task_id))
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, task_id):
+        form = TaskForm(request.POST, instance=Task.objects.get(pk=task_id))
+        if form.is_valid():
+            form.save()
+            return redirect("todo-app:home")
         return render(request, self.template_name, {'form': form})
 
