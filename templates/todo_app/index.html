@@ -13,7 +13,7 @@
 			<li>
 				{{ task.content }} - {{ task.created_at }} {% if task.deadline %}(Deadline: {{ task.deadline }}){% endif %}
 				<a href="{% url 'todo-app:update-task' task.id %}">Update</a>
-				<a href="#">Delete</a>
+				<a href="{% url 'todo-app:delete-task' task.id %}">Delete</a>
 				{% if task.is_done %}
 						<a href="#">Undo</a>
 				{% else %}
