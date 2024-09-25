@@ -1,5 +1,6 @@
 from django import views
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 
 from todo_app.forms import TaskForm, TagForm
 from todo_app.models import Task, Tag
@@ -20,48 +21,49 @@ class HomeView(views.View):
         return render(request, self.template_name, {'tasks': tasks})
 
 
-class TaskCreateView(views.View):
-    template_name = "todo_app/task_form.html"
+class BaseFormView(views.View):
+    form_class = None
+    template_name = None
+    success_url = None
+    model = None
 
-    def get(self, request):
-        form = TaskForm()
+    def get_object(self):
+        return None
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(instance=self.get_object())
         return render(
-            request, self.template_name,
-            {'form': form, 'is_update': False}
+            request,
+            self.template_name,
+            {"form": form, "is_update": bool(self.get_object())}
         )
 
-    def post(self, request):
-        form = TaskForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=self.get_object())
         if form.is_valid():
             form.save()
-            return redirect("todo-app:home")
+            return redirect(self.success_url)
         return render(
-            request, self.template_name,
-            {'form': form, 'is_update': False}
+            request,
+            self.template_name,
+            {"form": form, "is_update": bool(self.get_object())}
         )
 
 
-class TaskUpdateView(views.View):
+class TaskCreateView(BaseFormView):
     template_name = "todo_app/task_form.html"
+    form_class = TaskForm
+    success_url = reverse_lazy("todo-app:home")
 
-    def get(self, request, task_id):
-        task = get_object_or_404(Task, pk=task_id)
-        form = TaskForm(instance=task)
-        return render(
-            request, self.template_name,
-            {'form': form, 'is_update': True}
-        )
 
-    def post(self, request, task_id):
-        task = get_object_or_404(Task, pk=task_id)
-        form = TaskForm(request.POST, instance=task)
-        if form.is_valid():
-            form.save()
-            return redirect("todo-app:home")
-        return render(
-            request, self.template_name,
-            {'form': form, 'is_update': True}
-        )
+class TaskUpdateView(BaseFormView):
+    template_name = "todo_app/task_form.html"
+    form_class = TaskForm
+    success_url = reverse_lazy("todo-app:home")
+    model = Task
+
+    def get_object(self):
+        return get_object_or_404(Task, pk=self.kwargs["task_id"])
 
 
 class TaskDeleteView(views.View):
@@ -85,41 +87,22 @@ class TagListView(views.View):
         return render(request, self.template_name, {'tags': tags})
 
 
-class TagCreateView(views.View):
+class TagCreateView(BaseFormView):
     template_name = "todo_app/tag_form.html"
-
-    def get(self, request):
-        form = TagForm()
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request):
-        form = TagForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("todo-app:tag-list")
-        return render(request, self.template_name, {'form': form})
+    form_class = TagForm
+    success_url = reverse_lazy("todo-app:tag-list")
 
 
-class TagUpdateView(views.View):
+class TagUpdateView(BaseFormView):
     template_name = "todo_app/tag_form.html"
+    form_class = TagForm
+    success_url = reverse_lazy("todo-app:tag-list")
+    model = Tag
 
-    def get(self, request, tag_id):
-        tag = get_object_or_404(Tag, pk=tag_id)
-        form = TagForm(instance=tag)
-        return render(
-            request, self.template_name,
-            {'form': form, 'is_update': True}
-        )
-
-    def post(self, request, tag_id):
-        tag = get_object_or_404(Tag, pk=tag_id)
-        form = TagForm(request.POST, instance=tag)
-        if form.is_valid():
-            form.save()
-            return redirect("todo-app:tag-list")
-        return render(
-            request, self.template_name,
-            {'form': form, 'is_update': True}
+    def get_object(self):
+        return get_object_or_404(
+            Tag,
+            pk=self.kwargs["tag_id"]
         )
 
 

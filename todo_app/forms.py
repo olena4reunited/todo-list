@@ -14,6 +14,11 @@ class TaskForm(forms.ModelForm):
             ),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance is None:
+            self.fields["done"].initial = False
+
     def clean_deadline(self):
         deadline = self.cleaned_data.get("deadline")
         if deadline is not None and deadline < timezone.now():
