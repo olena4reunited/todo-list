@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}
+	<title>Tag List</title>
+{% endblock %}
+
+{% block content %}
+	<div class="container mt-5">
+		<h1>Tag List</h1>
+		<a href="#" class="btn btn-primary mb-3">Add Tag</a>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Tag Name</th>
+					<th>Update</th>
+					<th>Delete</th>
+				</tr>
+			</thead>
+				<tbody>
+					{% if tags %}
+						{% for tag in tags %}
+							<tr>
+								<td>{{ tag.name }}</td>
+								<td>
+									<a href="#" class="btn btn-info">Update</a>
+								</td>
+								<td>
+									<a href="#" class="btn btn-info">Delete</a>
+								</td>
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="3" class="text-center">No tags available.</td>
+						</tr>
+					{% endif %}
+				</tbody>
+		</table>
+	</div>
+{% endblock %}
