@@ -5,11 +5,17 @@
 {% endblock %}
 
 {% block content %}
-	<h1>Delete Tag</h1>
-	<p>Are you sure you want to delete the tag "{{ tag.name }}"?</p>
-	<form method="post">
-		{% csrf_token %}
-		<button type="submit" class="btn btn-danger">Delete</button>
-		<a href="{% url 'todo-app:tag-list' %}" class="btn btn-secondary">Cancel</a>
-	</form>
+	<div class="container mt-5">
+		<div class="card">
+			<div class="card-body text-center">
+				<h1>Delete Tag</h1>
+				<p>Are you sure you want to delete the tag "<strong>{{ tag.name }}</strong>"?</p>
+				<form method="post" class="d-inline">
+					{% csrf_token %}
+					<button type="submit" class="btn btn-danger">Delete</button>
+					<a href="{% url 'todo-app:tag-list' %}" class="btn btn-secondary">Cancel</a>
+				</form>
+			</div>
+		</div>
+	</div>
 {% endblock %}
