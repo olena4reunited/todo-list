@@ -20,20 +20,25 @@ class HomeView(views.View):
         return render(request, self.template_name, {'tasks': tasks})
 
 
-
 class TaskCreateView(views.View):
     template_name = "todo_app/task_form.html"
 
     def get(self, request):
         form = TaskForm()
-        return render(request, self.template_name, {'form': form, 'is_update': False})
+        return render(
+            request, self.template_name,
+            {'form': form, 'is_update': False}
+        )
 
     def post(self, request):
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("todo-app:home")
-        return render(request, self.template_name, {'form': form, 'is_update': False})
+        return render(
+            request, self.template_name,
+            {'form': form, 'is_update': False}
+        )
 
 
 class TaskUpdateView(views.View):
@@ -42,7 +47,10 @@ class TaskUpdateView(views.View):
     def get(self, request, task_id):
         task = get_object_or_404(Task, pk=task_id)
         form = TaskForm(instance=task)
-        return render(request, self.template_name, {'form': form, 'is_update': True})
+        return render(
+            request, self.template_name,
+            {'form': form, 'is_update': True}
+        )
 
     def post(self, request, task_id):
         task = get_object_or_404(Task, pk=task_id)
@@ -50,9 +58,10 @@ class TaskUpdateView(views.View):
         if form.is_valid():
             form.save()
             return redirect("todo-app:home")
-        return render(request, self.template_name, {'form': form, 'is_update': True})
-
-
+        return render(
+            request, self.template_name,
+            {'form': form, 'is_update': True}
+        )
 
 
 class TaskDeleteView(views.View):
@@ -97,7 +106,10 @@ class TagUpdateView(views.View):
     def get(self, request, tag_id):
         tag = get_object_or_404(Tag, pk=tag_id)
         form = TagForm(instance=tag)
-        return render(request, self.template_name, {'form': form, 'is_update': True})
+        return render(
+            request, self.template_name,
+            {'form': form, 'is_update': True}
+        )
 
     def post(self, request, tag_id):
         tag = get_object_or_404(Tag, pk=tag_id)
@@ -105,8 +117,10 @@ class TagUpdateView(views.View):
         if form.is_valid():
             form.save()
             return redirect("todo-app:tag-list")
-        return render(request, self.template_name, {'form': form, 'is_update': True})
-
+        return render(
+            request, self.template_name,
+            {'form': form, 'is_update': True}
+        )
 
 
 class TagDeleteView(views.View):
@@ -120,4 +134,3 @@ class TagDeleteView(views.View):
         tag = get_object_or_404(Tag, pk=tag_id)
         tag.delete()
         return redirect("todo-app:tag-list")
-
