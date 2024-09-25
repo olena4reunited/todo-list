@@ -23,7 +23,7 @@
 							<a href="{% url 'todo-app:update-tag' tag.id %}">Update</a>
 						</td>
 						<td>
-							<a href="#">Delete</a>
+							<a href="{% url 'todo-app:delete-tag' tag.id %}">Delete</a>
 						</td>
 					</tr>
 				{% endfor %}

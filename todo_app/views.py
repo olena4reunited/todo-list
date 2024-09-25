@@ -107,3 +107,17 @@ class TagUpdateView(views.View):
             return redirect("todo-app:tag-list")
         return render(request, self.template_name, {'form': form, 'is_update': True})
 
+
+
+class TagDeleteView(views.View):
+    template_name = "todo_app/tag_delete_confirmation.html"
+
+    def get(self, request, tag_id):
+        tag = get_object_or_404(Tag, pk=tag_id)
+        return render(request, self.template_name, {'tag': tag})
+
+    def post(self, request, tag_id):
+        tag = get_object_or_404(Tag, pk=tag_id)
+        tag.delete()
+        return redirect("todo-app:tag-list")
+
