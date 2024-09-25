@@ -14,10 +14,10 @@
 				{{ task.content }} - {{ task.created_at }} {% if task.deadline %}(Deadline: {{ task.deadline }}){% endif %}
 				<a href="{% url 'todo-app:update-task' task.id %}">Update</a>
 				<a href="{% url 'todo-app:delete-task' task.id %}">Delete</a>
-				{% if task.is_done %}
-						<a href="#">Undo</a>
+				{% if task.done %}
+					<button type="submit" class="btn btn-warning">Undo</button>
 				{% else %}
-						<a href="#">Complete</a>
+					<button type="submit" class="btn btn-success">Complete</button>
 				{% endif %}
 			</li>
 		{% endfor %}

@@ -9,6 +9,13 @@ class HomeView(views.View):
     template_name = "todo_app/index.html"
 
     def dispatch(self, request, *args, **kwargs):
+        if request.method == "POST":
+            task_id = request.POST.get('task_id')
+            task = get_object_or_404(Task, pk=task_id)
+            task.done = not task.done
+            task.save()
+            return redirect("todo-app:home")
+
         tasks = Task.objects.order_by("done", "-created_at")
         return render(request, self.template_name, {'tasks': tasks})
 
