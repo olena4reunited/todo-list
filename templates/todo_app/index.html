@@ -14,11 +14,15 @@
 				{{ task.content }} - {{ task.created_at }} {% if task.deadline %}(Deadline: {{ task.deadline }}){% endif %}
 				<a href="{% url 'todo-app:update-task' task.id %}">Update</a>
 				<a href="{% url 'todo-app:delete-task' task.id %}">Delete</a>
-				{% if task.done %}
-					<button type="submit" class="btn btn-warning">Undo</button>
-				{% else %}
-					<button type="submit" class="btn btn-success">Complete</button>
-				{% endif %}
+				<form method="post" action="{% url 'todo-app:home' %}">
+					{% csrf_token %}
+					<input type="hidden" name="task_id" value="{{ task.id }}">
+					{% if task.done %}
+						<button type="submit" class="btn btn-warning">Undo</button>
+					{% else %}
+						<button type="submit" class="btn btn-success">Complete</button>
+					{% endif %}
+				</form>
 			</li>
 		{% endfor %}
 	</ul>

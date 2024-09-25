@@ -15,8 +15,8 @@ class TaskForm(forms.ModelForm):
         }
 
     def clean_deadline(self):
-        deadline = self.cleaned_data["deadline"]
-        if deadline < timezone.now():
+        deadline = self.cleaned_data.get("deadline")
+        if deadline is not None and deadline < timezone.now():
             raise forms.ValidationError("Deadline must be in the future")
         return deadline
 
