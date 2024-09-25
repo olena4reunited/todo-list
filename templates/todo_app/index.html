@@ -6,7 +6,7 @@
 
 {% block content %}
 	<h1>Todo List</h1>
-	<a href="#">Create Task</a>
+	<a href="{% url 'todo-app:create-task' %}">Create Task</a>
 
 	<ul>
 		{% for task in tasks %}
