@@ -1,7 +1,7 @@
 from django import views
 from django.shortcuts import render, redirect, get_object_or_404
 
-from todo_app.forms import TaskForm
+from todo_app.forms import TaskForm, TagForm
 from todo_app.models import Task, Tag
 
 
@@ -26,30 +26,32 @@ class TaskCreateView(views.View):
 
     def get(self, request):
         form = TaskForm()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'is_update': False})
 
     def post(self, request):
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("todo-app:home")
-        return render(request, self.template_name, {'form': form})
-
+        return render(request, self.template_name, {'form': form, 'is_update': False})
 
 
 class TaskUpdateView(views.View):
     template_name = "todo_app/task_form.html"
 
     def get(self, request, task_id):
-        form = TaskForm(instance=Task.objects.get(pk=task_id))
-        return render(request, self.template_name, {'form': form})
+        task = get_object_or_404(Task, pk=task_id)
+        form = TaskForm(instance=task)
+        return render(request, self.template_name, {'form': form, 'is_update': True})
 
     def post(self, request, task_id):
-        form = TaskForm(request.POST, instance=Task.objects.get(pk=task_id))
+        task = get_object_or_404(Task, pk=task_id)
+        form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
             return redirect("todo-app:home")
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'is_update': True})
+
 
 
 
@@ -72,3 +74,18 @@ class TagListView(views.View):
     def get(self, request):
         tags = Tag.objects.all()
         return render(request, self.template_name, {'tags': tags})
+
+
+class TagCreateView(views.View):
+    template_name = "todo_app/tag_form.html"
+
+    def get(self, request):
+        form = TagForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = TagForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("todo-app:tag-list")
+        return render(request, self.template_name, {'form': form})

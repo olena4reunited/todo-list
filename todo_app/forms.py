@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from todo_app.models import Task
+from todo_app.models import Task, Tag
 
 
 class TaskForm(forms.ModelForm):
@@ -20,3 +20,8 @@ class TaskForm(forms.ModelForm):
             raise forms.ValidationError("Deadline must be in the future")
         return deadline
 
+
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['name']
