@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-	<title>Home</title>
+    <title>Home</title>
 {% endblock %}
 
 {% block content %}
@@ -12,6 +12,12 @@
 		{% for task in tasks %}
 			<li>
 				{{ task.content }} - {{ task.created_at }} {% if task.deadline %}(Deadline: {{ task.deadline }}){% endif %}
+				<br>
+				Tags: 
+				{% for tag in task.tags.all %}
+					{{ tag.name }}{% if not forloop.last %}, {% endif %}
+				{% endfor %}
+				<br>
 				<a href="{% url 'todo-app:update-task' task.id %}">Update</a>
 				<a href="{% url 'todo-app:delete-task' task.id %}">Delete</a>
 				<form method="post" action="{% url 'todo-app:home' %}">
@@ -26,5 +32,5 @@
 			</li>
 		{% endfor %}
 	</ul>
-	
+    
 {% endblock %}

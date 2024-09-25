@@ -89,3 +89,21 @@ class TagCreateView(views.View):
             form.save()
             return redirect("todo-app:tag-list")
         return render(request, self.template_name, {'form': form})
+
+
+class TagUpdateView(views.View):
+    template_name = "todo_app/tag_form.html"
+
+    def get(self, request, tag_id):
+        tag = get_object_or_404(Tag, pk=tag_id)
+        form = TagForm(instance=tag)
+        return render(request, self.template_name, {'form': form, 'is_update': True})
+
+    def post(self, request, tag_id):
+        tag = get_object_or_404(Tag, pk=tag_id)
+        form = TagForm(request.POST, instance=tag)
+        if form.is_valid():
+            form.save()
+            return redirect("todo-app:tag-list")
+        return render(request, self.template_name, {'form': form, 'is_update': True})
+

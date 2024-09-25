@@ -20,7 +20,7 @@
 					<tr>
 						<td>{{ tag.name }}</td>
 						<td>
-							<a href="#">Update</a>
+							<a href="{% url 'todo-app:update-tag' tag.id %}">Update</a>
 						</td>
 						<td>
 							<a href="#">Delete</a>

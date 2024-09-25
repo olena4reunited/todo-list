@@ -2,7 +2,7 @@
 {% load custom_filter %}
 
 {% block title %}
-  <title>{{ object|yesno:"Update,Create" }} Tag {{ tag.name }}</title>
+  <title>{% if is_update %}Update{% else %}Create{% endif %} Tag</title>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
       <div class="col-md-6">
         <div class="card shadow-sm">
           <div class="card-body p-4">
-            <h1 class="h4 card-title text-center mb-4">{{ object|yesno:"Update,Create" }} Tag {{ tag.name }}</h1>
+            <h1 class="h4 card-title text-center mb-4">{% if is_update %}Update{% else %}Create{% endif %} Tag</h1>
 
             <form method="post" novalidate>
               {% csrf_token %}
@@ -38,7 +38,7 @@
 
               <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">
-                  {{ object|yesno:"Update,Create" }} Tag
+                  {% if is_update %}Update{% else %}Create{% endif %} Task
                 </button>
                 <a href="{% url 'todo-app:tag-list' %}" class="btn btn-outline-secondary">Back to all Tags</a>
               </div>
