@@ -11,14 +11,14 @@ class HomeView(views.View):
 
     def dispatch(self, request, *args, **kwargs):
         if request.method == "POST":
-            task_id = request.POST.get('task_id')
+            task_id = request.POST.get("task_id")
             task = get_object_or_404(Task, pk=task_id)
             task.done = not task.done
             task.save()
             return redirect("todo-app:home")
 
         tasks = Task.objects.order_by("done", "-created_at")
-        return render(request, self.template_name, {'tasks': tasks})
+        return render(request, self.template_name, {"tasks": tasks})
 
 
 class BaseFormView(views.View):
@@ -71,7 +71,7 @@ class TaskDeleteView(views.View):
 
     def get(self, request, task_id):
         task = get_object_or_404(Task, pk=task_id)
-        return render(request, self.template_name, {'task': task})
+        return render(request, self.template_name, {"task": task})
 
     def post(self, request, task_id):
         task = get_object_or_404(Task, pk=task_id)
@@ -84,7 +84,7 @@ class TagListView(views.View):
 
     def get(self, request):
         tags = Tag.objects.all()
-        return render(request, self.template_name, {'tags': tags})
+        return render(request, self.template_name, {"tags": tags})
 
 
 class TagCreateView(BaseFormView):
@@ -111,7 +111,7 @@ class TagDeleteView(views.View):
 
     def get(self, request, tag_id):
         tag = get_object_or_404(Tag, pk=tag_id)
-        return render(request, self.template_name, {'tag': tag})
+        return render(request, self.template_name, {"tag": tag})
 
     def post(self, request, tag_id):
         tag = get_object_or_404(Tag, pk=tag_id)
